@@ -5,9 +5,9 @@ resource "aws_s3_bucket" "b" {
     Name        = "My bucket"
     Environment = "Dev"
   }
-}   
+}
 
 provider "aws" {
-    profile = "personal"
-    region = "us-east-1"
+  profile = "personal"
+  region  = "us-east-1"
 }

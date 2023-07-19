@@ -17,7 +17,7 @@ jobs:
       run:
         shell: bash
         # We keep Terraform files in the terraform directory.
-        #working-directory: .
+        working-directory: ./user_experience/infra
 
     steps:
       - name: Checkout the repository to the runner

@@ -5,8 +5,8 @@ on:
   push:
     branches:
       - main
-    paths:
-      - user_experience/infra/**
+    # paths:
+    #   - user_experience/infra/**
   #workflow_dispatch:
 
 jobs:

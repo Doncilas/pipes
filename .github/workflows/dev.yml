@@ -5,14 +5,54 @@ on:
   push:
     branches:
       - main
+    paths:
+      - user_experience/**
   workflow_dispatch:
 
 jobs:
-  # Jobs
-  generate-release:
-    name: Create GitHub Release
-    # Runner OS
+  terraform:
+    name: "Terraform Infrastructure Change Management"
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        # We keep Terraform files in the terraform directory.
+        #working-directory: .
+
     steps:
-    - name: Print the input tag to STDOUT
-      run: echo "I am inside the workflow"
+      - name: Checkout the repository to the runner
+        uses: actions/checkout@v3
+
+      # - name: STAGING - Configure AWS profile
+      #   uses: aws-actions/configure-aws-credentials@v2
+      #   with:
+      #     aws-region: ${{ env.AWS_REGION }}
+      #     role-to-assume: ${{ env.STAGING_AWS_ROLE_TO_ASSUME }}
+      #     role-session-name: devops-terraform
+
+      # - name: STAGING - Create AWS profile from credentials
+      #   run: |
+      #     mkdir ~/.aws
+      #     echo "
+      #     [personal]
+      #     aws_access_key_id=AKIAQPRLCI546OWJRSHT
+      #     region=us-east-1
+      #     aws_secret_access_key=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
+      #     aws_session_token=$AWS_SESSION_TOKEN" > ~/.aws/credentials     
+
+      - name: Setup Terraform with specified version on the runner
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.4.2
+
+      - name: Terraform init
+        id: init
+        run: terraform init
+
+      - name: Terraform format
+        id: fmt
+        run: terraform fmt -check
+
+      - name: Terraform validate
+        id: validate
+        run: terraform validate

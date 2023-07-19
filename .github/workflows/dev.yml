@@ -6,8 +6,8 @@ on:
     branches:
       - main
     paths:
-      - user_experience/**
-  workflow_dispatch:
+      - user_experience/infra/**
+  #workflow_dispatch:
 
 jobs:
   terraform:

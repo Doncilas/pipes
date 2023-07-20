@@ -28,7 +28,8 @@ jobs:
 
       - name: Generate .env file
         run: |
-          echo "$VARS_JSON";
+          echo "$VARS_JSON" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' >> .env;
+          cat .env;
 
       - name: Setup Terraform with specified version on the runner
         uses: hashicorp/setup-terraform@v2

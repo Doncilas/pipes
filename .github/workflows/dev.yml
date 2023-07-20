@@ -13,6 +13,7 @@ jobs:
   terraform:
     name: "Terraform Infrastructure Change Management"
     runs-on: ubuntu-latest
+    environment: development
     env:
       VARS_JSON: ${{ toJSON(vars) }}
     defaults:

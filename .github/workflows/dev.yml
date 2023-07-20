@@ -13,32 +13,22 @@ jobs:
   terraform:
     name: "Terraform Infrastructure Change Management"
     runs-on: ubuntu-latest
+    env:
+      VARS_JSON: ${{ toJSON(vars) }}
     defaults:
       run:
         shell: bash
         # We keep Terraform files in the terraform directory.
-        working-directory: ./user_experience/infra
+        working-directory: ./user-experience/infra
 
     steps:
       - name: Checkout the repository to the runner
         uses: actions/checkout@v3
 
-      # - name: STAGING - Configure AWS profile
-      #   uses: aws-actions/configure-aws-credentials@v2
-      #   with:
-      #     aws-region: ${{ env.AWS_REGION }}
-      #     role-to-assume: ${{ env.STAGING_AWS_ROLE_TO_ASSUME }}
-      #     role-session-name: devops-terraform
-
-      # - name: STAGING - Create AWS profile from credentials
-      #   run: |
-      #     mkdir ~/.aws
-      #     echo "
-      #     [personal]
-      #     aws_access_key_id=AKIAQPRLCI546OWJRSHT
-      #     region=us-east-1
-      #     aws_secret_access_key=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
-      #     aws_session_token=$AWS_SESSION_TOKEN" > ~/.aws/credentials     
+      - name: Generate .env file
+        run: |
+          echo "$VARS_JSON" | jq -r 'keys[] as $k | "\($k)=\(.[$k])"' >> .env;
+          cat .env;
 
       - name: Setup Terraform with specified version on the runner
         uses: hashicorp/setup-terraform@v2
